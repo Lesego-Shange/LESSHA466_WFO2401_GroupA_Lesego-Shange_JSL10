@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("solveRoom2").addEventListener("click", () => {
-    const jsConcepts = new Set(["closure", "scope", "hoisting"]);
+    const jsConcepts = new Set(["closure", "scope", "hoisting", "async"]);
     // 🪲 Bug: What's mssing from JS concepts?
     const reactConcepts = new Set(["components", "jsx", "hooks", "async"]);
     // 🪲 Bug: Incorrect function call
@@ -29,11 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("solveRoom3").addEventListener("click", () => {
     fetch("directions.json")
       .then((response) => response.json())
-      .then((directions) => {
-        async function navigateLabyrinth(directions).then((message) => {
-          // 🪲 Bug: Incorrect method
-          document.getElementById("room3Result").innerHTML = message;
-        });
+      .then(async (directions) => {
+        const message = await navigateLabyrinth(directions);
+        document.getElementById("room3Result").innerHTML = message;
+      })
+      .catch((error) => {
+        console.error("Error fetching directions:", error);
+        document.getElementById("room3Result").innerHTML =
+          "Error: Failed to fetch directions";
       });
   });
 });
@@ -49,7 +52,7 @@ function findMostRecentBook(books) {
 
 function findIntersection(setA, setB) {
   // 🪲 Bug: Incorrect logic
-  const intersection = new Set([...setA].filter(x => setB.has(x)));
+  const intersection = new Set([...setA].filter((x) => setB.has(x)));
   return intersection;
 }
 
